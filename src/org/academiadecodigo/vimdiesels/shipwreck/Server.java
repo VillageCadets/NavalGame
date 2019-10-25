@@ -27,12 +27,7 @@ public class Server {
     //2nd - start the server with a welcome message
     public void init(int port) throws IOException {
 
-        Prompt prompt = new Prompt(System.in, System.out);
-
-        String[] menuOptions = {"Log In", "Exit"};
-
-        MenuInputScanner opt = new MenuInputScanner(menuOptions);
-        opt.setMessage("=== Welcome to SHIP WRECK ===");
+        System.out.println("====== Village Cadets ======");
         serverSocket = new ServerSocket(port);
     }
     //3rd - Server starts listening for players to join in
@@ -40,6 +35,6 @@ public class Server {
 
         Socket playerSocket = serverSocket.accept();
         System.out.println(Thread.activeCount() + "\n");
-       // threadPool.submit(new Player(playerSocket));
+        threadPool.submit(new Player(this, playerSocket));
     }
 }
