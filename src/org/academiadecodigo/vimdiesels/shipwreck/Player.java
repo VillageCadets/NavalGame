@@ -42,7 +42,7 @@ public class Player implements Runnable {
 
                 if (answerIndex == 1) {
                     if (players.length == 2) {
-                        Game game = new Game()
+                        //Game game = new Game()
                     }
 
                 }
