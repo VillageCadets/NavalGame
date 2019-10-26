@@ -7,21 +7,23 @@ import org.academiadecodigo.vimdiesels.shipwreck.Server;
 import java.io.*;
 import java.net.Socket;
 
-public class Player implements Runnable {
+public class Player {
 
     private String username;
     private Socket playerSocket;
+    BufferedReader in = null;
     private Prompt prompt;
     private boolean inGame;
     private boolean availableToPlay;
 
-    public Player(Socket playerSocket) {
+    Player(Socket playerSocket) {
 
         this.inGame = false;
         this.availableToPlay = false;
 
         try {
             this.playerSocket = playerSocket;
+            in = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
             prompt = new Prompt(playerSocket.getInputStream(), new PrintStream(playerSocket.getOutputStream()));
 
         } catch (IOException e) {
@@ -29,26 +31,27 @@ public class Player implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-
+    public void createGame(Player p1, Player p2){
+        Game game = new Game(p1, p2);
     }
 
-    public Prompt getPrompt() {
+    Prompt getPrompt() {
         return prompt;
     }
 
-    public boolean isInGame() {
+    boolean isInGame() {
         return inGame;
     }
 
-    public boolean isAvailableToPlay() {
+    boolean isAvailableToPlay() {
         return availableToPlay;
     }
 
-    public void changeAvailability() {
+    void changeAvailability() {
         availableToPlay = !availableToPlay;
     }
 
-
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
+    }
 }

@@ -4,9 +4,7 @@ import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.vimdiesels.shipwreck.Server;
 
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Lobby implements Runnable {
@@ -39,27 +37,38 @@ public class Lobby implements Runnable {
             int answerIndex = prompt.getUserInput(opt);
 
             if (answerIndex == 1) {
-                System.out.println("Waiting for players to join");
-                player.changeAvailability();
 
-                while (checkPlayerAvailability() == null ) {
-                    System.out.println("-> " + checkPlayerAvailability());
-                    checkPlayerAvailability();
+                String [] playOptions = {"Create Game", "Join Game"};
+                Prompt promptGame = player.getPrompt();
+                MenuInputScanner gameOpt = new MenuInputScanner(playOptions);
+
+                int answerIndexPlay= promptGame.getUserInput(gameOpt);
+
+                if(answerIndexPlay == 1){
+
+                    player.changeAvailability();
+
+                    while (checkPlayerAvailability() == null) {
+                        System.out.println("-> " + checkPlayerAvailability());
+                        checkPlayerAvailability();
+                    }
+                    player.setInGame(true);
+                    player.createGame(player, checkPlayerAvailability());
+                    System.out.println("Waiting for players to join");
+                    
                 }
-
-                System.out.println("new game");
-                    //new Game(player, checkPlayerAvailability());
             }
 
-            System.out.println("User wants to " + menuOptions[answerIndex - 1] + "\n");
+
         }
     }
 
     private Player checkPlayerAvailability() {
-        for (Lobby l: lobbyList) {
+        for (Lobby l : lobbyList) {
             if (!l.equals(this) && l.getPlayer().isAvailableToPlay())
                 return l.getPlayer();
         }
+        System.out.println("Waiting for other players to join");
         return null;
     }
 
