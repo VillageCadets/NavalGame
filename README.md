@@ -1,4 +1,4 @@
-# Ship Wreck
+##  Ship Wreck
 
 Project developed as a second group project at <Academia de Código_> Bootcamp#34, at the end of the 7th week, during 3 days.
 
@@ -14,7 +14,7 @@ File build.xml provided. In order to run you can build the zip file .Jar with co
 
 Run the program and connect the clients via NetCat to the computer's IP on port 3030 : " nc x.x.x.x 3030".
 
-##Features
+## Features
 
 Players enter a looby
 To start the game just wait for the 2nd player to connect
