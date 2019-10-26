@@ -17,16 +17,16 @@ public class Tile {
 
         switch (this.type) {
             case HIT:
-                representation = "[X]";
+                representation = "\u001B[31m"+" [X]"+ "\u001B[31m";
                 break;
             case SEA:
-                representation = " [~]";
+                representation = "\u001B[36m"+" [~]" + "\u001B[36m";
                 break;
             case MISS:
-                representation = " [O]";
+                representation = "\u001B[31m"+" [O]"+ "\u001B[31m";
                 break;
             case SHIP:
-                representation = " [S]";
+                representation = "\u001B[31m"+" [S]"+ "\u001B[31m";
             default:
                 break;
         }
@@ -37,5 +37,22 @@ public class Tile {
     @Override
     public String toString() {
         return representation ;
+    }
+
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setType(TileType type) {
+        this.type = type;
+    }
+
+    public TileType getType() {
+        return type;
     }
 }
