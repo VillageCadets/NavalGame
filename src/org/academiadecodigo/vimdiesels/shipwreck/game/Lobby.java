@@ -2,33 +2,27 @@ package org.academiadecodigo.vimdiesels.shipwreck.game;
 
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
+import org.academiadecodigo.vimdiesels.shipwreck.Server;
 
-import javax.xml.transform.Source;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Lobby implements Runnable {
 
     private Player player;
-    private ArrayList<Player> waitingPlayers;
+    private List<Lobby> lobbyList;
+    private String nickName;
 
-    public Lobby() {
-
-        waitingPlayers = new ArrayList<>();
-
-    }
-
-    public void addPlayerToLobby(Socket playerSocket) {
+    public Lobby(Server serverSocket, Socket playerSocket, String nickName) {
         this.player = new Player(playerSocket);
-        waitingPlayers.add(player);
+        this.lobbyList = serverSocket.getLobbyList();
+        this.nickName = nickName;
     }
 
     @Override
     public void run() {
-        //System.out.println("Player " + username + " started.");
         createMenu();
     }
 
@@ -47,22 +41,33 @@ public class Lobby implements Runnable {
             if (answerIndex == 1) {
                 System.out.println("Waiting for players to join");
                 player.changeAvailability();
-                Player player2 = checkForAvailablePlayers();
-                System.out.println(player + " - " + player2);
+
+                while (checkPlayerAvailability() == null ) {
+                    System.out.println("-> " + checkPlayerAvailability());
+                    checkPlayerAvailability();
+                }
+
+                System.out.println("new game");
+                    //new Game(player, checkPlayerAvailability());
             }
 
             System.out.println("User wants to " + menuOptions[answerIndex - 1] + "\n");
         }
     }
 
-    private Player checkForAvailablePlayers() {
-
-        for (Player p: waitingPlayers) {
-            if (p != player || p.isAvailableToPlay()) {
-                return p;
-            }
+    private Player checkPlayerAvailability() {
+        for (Lobby l: lobbyList) {
+            if (!l.equals(this) && l.getPlayer().isAvailableToPlay())
+                return l.getPlayer();
         }
-
         return null;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

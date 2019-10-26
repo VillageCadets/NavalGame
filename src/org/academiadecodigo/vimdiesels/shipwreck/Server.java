@@ -6,6 +6,9 @@ import org.academiadecodigo.vimdiesels.shipwreck.game.Player;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,17 +16,15 @@ public class Server {
 
     private ServerSocket serverSocket;
     private ExecutorService threadPool;
-    private Player[] players;
-    private Lobby lobby;
+    private final List<Lobby> lobbyList = Collections.synchronizedList(new ArrayList<>());
+    private int connectionNumber;
 
     //1st - start the threads and call the listening method
     public void run(int port) throws IOException {
 
         init(port);
         threadPool = Executors.newCachedThreadPool();
-
-        lobby = new Lobby();
-        threadPool.submit(lobby);
+        connectionNumber = 0;
 
         while (true) {
             listening();
@@ -38,12 +39,19 @@ public class Server {
     //3rd - Server starts listening for players to join in
     private void listening() throws IOException {
 
+        ++connectionNumber;
+
         Socket playerSocket = serverSocket.accept();
-        threadPool.submit(new Player(playerSocket));
-        lobby.addPlayerToLobby(playerSocket);
+
+        Lobby lobby = new Lobby(this, playerSocket, "Player_" + connectionNumber);
+        lobbyList.add(lobby);
+        threadPool.submit(lobby);
+
+
 
     }
 
-
-
+    public List<Lobby> getLobbyList() {
+        return lobbyList;
+    }
 }
