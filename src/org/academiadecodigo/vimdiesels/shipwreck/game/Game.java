@@ -14,4 +14,8 @@ public class Game {
         this.p2 = p2;
         this.board = new Board(20);
     }
+
+    private void start(){
+
+    }
 }
