@@ -1,8 +1,8 @@
-package org.academiadecodigo.vimdiesels.shipwreck;
+package org.academiadecodigo.vimdiesels.shipwreck.board;
 
 public class Board {
 
-    Tile[][] board;
+    private Tile[][] board;
     private int size;
 
     public Board(int size) {
@@ -10,8 +10,7 @@ public class Board {
         this.board = new Tile[size][size];
     }
 
-
-    public void init() {
+    private void init() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 this.board[i][j] = new Tile(i, j, TileType.SEA);
@@ -19,8 +18,7 @@ public class Board {
         }
     }
 
-    public void drawBoard() {
-        System.out.println();
+    private void drawBoard() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < size; i++) {
             builder.append("\t" + i);

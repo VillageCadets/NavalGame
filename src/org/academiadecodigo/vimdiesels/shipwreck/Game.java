@@ -1,5 +1,7 @@
 package org.academiadecodigo.vimdiesels.shipwreck;
 
+import org.academiadecodigo.vimdiesels.shipwreck.board.Board;
+
 public class Game {
 
     private boolean isStarted;

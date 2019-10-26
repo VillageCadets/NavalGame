@@ -1,4 +1,4 @@
-package org.academiadecodigo.vimdiesels.shipwreck;
+package org.academiadecodigo.vimdiesels.shipwreck.board;
 
 public class Tile {
 
