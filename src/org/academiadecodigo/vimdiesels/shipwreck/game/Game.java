@@ -1,4 +1,4 @@
-package org.academiadecodigo.vimdiesels.shipwreck;
+package org.academiadecodigo.vimdiesels.shipwreck.game;
 
 import org.academiadecodigo.vimdiesels.shipwreck.board.Board;
 

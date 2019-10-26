@@ -1,7 +1,7 @@
 package org.academiadecodigo.vimdiesels.shipwreck;
 
-import org.academiadecodigo.bootcamp.Prompt;
-import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
+import org.academiadecodigo.vimdiesels.shipwreck.game.Lobby;
+import org.academiadecodigo.vimdiesels.shipwreck.game.Player;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,6 +13,8 @@ public class Server {
 
     private ServerSocket serverSocket;
     private ExecutorService threadPool;
+    private Player[] players;
+    private Lobby lobby;
 
     //1st - start the threads and call the listening method
     public void run(int port) throws IOException {
@@ -20,21 +22,28 @@ public class Server {
         init(port);
         threadPool = Executors.newCachedThreadPool();
 
+        lobby = new Lobby();
+        threadPool.submit(lobby);
+
         while (true) {
             listening();
         }
     }
     //2nd - start the server with a welcome message
-    public void init(int port) throws IOException {
+    private void init(int port) throws IOException {
 
         System.out.println("====== Village Cadets ======");
         serverSocket = new ServerSocket(port);
     }
     //3rd - Server starts listening for players to join in
-    public void listening() throws IOException {
+    private void listening() throws IOException {
 
         Socket playerSocket = serverSocket.accept();
-        System.out.println(Thread.activeCount() + "\n");
-        threadPool.submit(new Player(this, playerSocket));
+        threadPool.submit(new Player(playerSocket));
+        lobby.addPlayerToLobby(playerSocket);
+
     }
+
+
+
 }
