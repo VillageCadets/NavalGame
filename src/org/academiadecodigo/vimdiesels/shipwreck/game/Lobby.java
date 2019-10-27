@@ -57,6 +57,7 @@ public class Lobby implements Runnable {
             switch (answerIndexPlay) {
 
                 case 1:
+
                     player.changeAvailability();
                     player.setInGame(true);
                     serverSocket.getGamesList().add(player.createGame());
@@ -93,13 +94,13 @@ public class Lobby implements Runnable {
                     break;
             }
 
+        } else {
+            try {
+                player.getPlayerSocket().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        try {
-            player.getPlayerSocket().close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private Game getGameOnHold() {

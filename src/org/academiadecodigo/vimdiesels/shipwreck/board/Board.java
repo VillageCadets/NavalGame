@@ -9,11 +9,11 @@ public class Board {
 
     private Tile[][] board;
     private int size;
+    private int winScore;
 
     public Board(int size) {
         this.size = size;
         this.board = new Tile[size][size];
-
     }
 
     public void init() {
@@ -22,37 +22,46 @@ public class Board {
                 this.board[i][j] = new Tile(i, j, TileType.SEA);
             }
         }
+        Ship ship = new Ship(4);
+        for (int i = 0; i < 5 ; i++) {
+            this.placeShip(ship);
+            winScore += ship.getShipSize();
+        }
     }
 
-    public void drawBoard() {
+    public String drawBoard() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < size; i++) {
-            builder.append("\t" + i);
+            if(i == 0){
+                builder.append("    "+i);
+                continue;
+            }
+            builder.append("   " + i );
         }
+        builder.append("\n");
 
-        System.out.print(builder.toString());
-        System.out.println("\n");
         for (int i = 0; i < size; i++) {
             if (i < 10) {
-                System.out.print(i + " ");
+                builder.append(i + " ");
             } else {
                 System.out.print(i + "");
             }
             for (int j = 0; j < size; j++) {
                 this.board[i][j].draw();
+                builder.append(this.board[i][j].toString());
             }
-            System.out.println("\n");
+            builder.append("\n");
         }
-        //return builder.toString();
-        System.out.print(" " + builder.toString());
+        return builder.toString();
 
     }
 
-    public void placeShip(Ship ship) {
+
+    public void placeShip(Ship ship){
 
         try {
-            ship.placeShip(this, this.getTile((int) (Math.random() * (size - 2)), (int) (Math.random() * (size - 2))),
-                    Direction.values()[(int) (Math.random() * (Direction.values().length))]);
+                ship.placeShip(this, this.getTile((int) (Math.random() * (size - 2)), (int) (Math.random() * (size - 2))),
+                        Direction.values()[(int) (Math.random() * (Direction.values().length))]);
 
         } catch (OverShipException e) {
             e.printStackTrace();
@@ -62,6 +71,9 @@ public class Board {
 
     }
 
+    public int getWinScore() {
+        return winScore;
+    }
 
     public int getSize() {
         return size;
