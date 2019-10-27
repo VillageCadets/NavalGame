@@ -80,4 +80,7 @@ public class Player {
         return null;
     }
 
+    public Socket getPlayerSocket() {
+        return playerSocket;
+    }
 }
