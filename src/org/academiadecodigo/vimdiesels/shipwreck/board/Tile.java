@@ -17,16 +17,16 @@ public class Tile {
 
         switch (this.type) {
             case HIT:
-                representation = "\u001B[31m"+" [X]"+ "\u001B[31m";
+                representation = "\u001B[31m"+" [X]";
                 break;
             case SEA:
-                representation = "\u001B[36m"+" [~]" + "\u001B[36m";
+                representation = "\u001B[36m"+" [~]";
                 break;
             case MISS:
-                representation = "\u001B[33m"+" [O]"+ "\u001B[33m";
+                representation = "\u001B[33m"+" [O]";
                 break;
             case SHIP:
-                representation = "\u001B[35m"+" [S]"+ "\u001B[35m";
+                representation = "\u001B[35m"+" [S]";
             default:
                 break;
         }

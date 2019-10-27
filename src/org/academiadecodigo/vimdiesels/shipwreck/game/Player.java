@@ -16,12 +16,13 @@ public class Player {
     private Prompt prompt;
     private boolean inGame;
     private boolean availableToPlay;
+    private int shotHit;
 
     Player(Socket playerSocket) {
 
         this.inGame = false;
         this.availableToPlay = false;
-
+        this.shotHit = 0;
         try {
             this.playerSocket = playerSocket;
             in = new BufferedReader(new InputStreamReader(playerSocket.getInputStream()));
@@ -62,8 +63,8 @@ public class Player {
         try {
             IntegerInputScanner colScanner = new IntegerRangeInputScanner(0, 9);
             IntegerInputScanner rowScanner = new IntegerRangeInputScanner(0, 9);
-            colScanner.setMessage("Insert Column \n");
-            rowScanner.setMessage("Insert Row \n");
+            colScanner.setMessage("Insert Row \n");
+            rowScanner.setMessage("Insert Column \n");
 
             Prompt promptPosition = new Prompt(playerSocket.getInputStream(), new PrintStream(playerSocket.getOutputStream()));
 
@@ -81,5 +82,13 @@ public class Player {
 
     public Socket getPlayerSocket() {
         return playerSocket;
+    }
+
+    public void hit(){
+        shotHit++;
+    }
+
+    public int getShotHit() {
+        return shotHit;
     }
 }

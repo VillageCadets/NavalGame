@@ -8,18 +8,10 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-       /* Server server = new Server();
+        Server server = new Server();
         server.run(4050);
-*/
-        Board board = new Board(10);
-        Ship ship = new Ship(4);
 
-        board.placeShip(ship);
-        board.placeShip(ship);
-        board.placeShip(ship);
-        board.placeShip(ship);
-        board.placeShip(ship);
-        board.drawBoard();
+
 
     }
 }
