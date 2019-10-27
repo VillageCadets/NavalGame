@@ -16,27 +16,29 @@ public class Board {
         this.board = new Tile[size][size];
     }
 
-    public void init() {
+    public String init(boolean hidden) {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 this.board[i][j] = new Tile(i, j, TileType.SEA);
             }
         }
         Ship ship = new Ship(4);
-        for (int i = 0; i < 5 ; i++) {
+        for (int i = 0; i < 5; i++) {
             this.placeShip(ship);
             winScore += ship.getShipSize();
         }
+
+        return this.drawBoard(hidden);
     }
 
-    public String drawBoard() {
+    public String drawBoard(boolean hidden) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < size; i++) {
-            if(i == 0){
-                builder.append("    "+i);
+            if (i == 0) {
+                builder.append("    " + i);
                 continue;
             }
-            builder.append("   " + i );
+            builder.append("   " + i);
         }
         builder.append("\n");
 
@@ -47,7 +49,7 @@ public class Board {
                 System.out.print(i + "");
             }
             for (int j = 0; j < size; j++) {
-                this.board[i][j].draw();
+                this.board[i][j].draw(hidden);
                 builder.append(this.board[i][j].toString());
             }
             builder.append("\n");
@@ -57,11 +59,11 @@ public class Board {
     }
 
 
-    public void placeShip(Ship ship){
+    public void placeShip(Ship ship) {
 
         try {
-                ship.placeShip(this, this.getTile((int) (Math.random() * (size - 2)), (int) (Math.random() * (size - 2))),
-                        Direction.values()[(int) (Math.random() * (Direction.values().length))]);
+            ship.placeShip(this, this.getTile((int) (Math.random() * (size - 2)), (int) (Math.random() * (size - 2))),
+                    Direction.values()[(int) (Math.random() * (Direction.values().length))]);
 
         } catch (OverShipException e) {
             e.printStackTrace();
