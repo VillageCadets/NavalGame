@@ -1,5 +1,6 @@
 package org.academiadecodigo.vimdiesels.shipwreck;
 
+import org.academiadecodigo.vimdiesels.shipwreck.game.Game;
 import org.academiadecodigo.vimdiesels.shipwreck.game.Lobby;
 import org.academiadecodigo.vimdiesels.shipwreck.game.Player;
 
@@ -17,6 +18,8 @@ public class Server {
     private ServerSocket serverSocket;
     private ExecutorService threadPool;
     private final List<Lobby> lobbyList = Collections.synchronizedList(new ArrayList<>());
+    private final List<Game> gamesList = Collections.synchronizedList(new ArrayList<>());
+
     private int connectionNumber;
 
     //1st - start the threads and call the listening method
@@ -33,7 +36,7 @@ public class Server {
     //2nd - start the server with a welcome message
     private void init(int port) throws IOException {
 
-        System.out.println("====== Village Cadets ======");
+        System.out.println("====== Village Cadets Server Running ======");
         serverSocket = new ServerSocket(port);
     }
     //3rd - Server starts listening for players to join in
@@ -47,11 +50,14 @@ public class Server {
         lobbyList.add(lobby);
         threadPool.submit(lobby);
 
-
-
     }
 
     public List<Lobby> getLobbyList() {
         return lobbyList;
     }
+
+    public List<Game> getGamesList() {
+        return gamesList;
+    }
+
 }
