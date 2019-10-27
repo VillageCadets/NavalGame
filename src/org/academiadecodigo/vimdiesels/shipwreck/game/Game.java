@@ -13,8 +13,8 @@ public class Game {
     private Player p1;
     private Player p2;
     private Board board;
-    private Player [] players;
-
+    private Player[] players;
+    PrintWriter printWriter;
 
     public Game(Player p1) {
         this.p1 = p1;
@@ -36,19 +36,19 @@ public class Game {
     }
 
 
-    private void showBoard(){
+    private void showBoard() {
 
-        PrintWriter printWriter;
+
         this.board = new Board(10);
         board.init();
         board.drawBoard();
 
         try {
 
-            for (Player p: players) {
+            for (Player p : players) {
 
                 printWriter = new PrintWriter(p.getPlayerSocket().getOutputStream());
-                printWriter.print("HEREEEEEEEEEEE");
+                printWriter.print("HERE GOES A NAVAL BATTLE BOARD");
                 printWriter.flush();
 
             }
@@ -59,18 +59,38 @@ public class Game {
 
     }
 
+    private void turn() {
 
-    private void start(){
+    }
 
-        showBoard();
-        int[] move = p1.makeMove();
-        board.getTile(move[0], move[1]);
+    private void start() {
 
+            showBoard();
+            fire(p1);
+            fire(p2);
+            start();
     }
 
     public void addPlayer(Player player) {
         p2 = player;
-        players [0] = p1;
-        players [1] = p2;
+        players[0] = p1;
+        players[1] = p2;
+    }
+
+    private void fire(Player player) {
+
+        try {
+
+            int[] move = player.makeMove();
+            printWriter = new PrintWriter(player.getPlayerSocket().getOutputStream());
+            System.out.println("p1 has played \n");
+            System.out.println(board.getTile(move[0], move[1]));
+            printWriter.print("your turn has finished \n");
+            printWriter.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

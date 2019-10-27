@@ -29,6 +29,7 @@ public class Board {
         for (int i = 0; i < size; i++) {
             builder.append("\t" + i);
         }
+
         System.out.print(builder.toString());
         System.out.println("\n");
         for (int i = 0; i < size; i++) {
@@ -42,16 +43,16 @@ public class Board {
             }
             System.out.println("\n");
         }
+        //return builder.toString();
         System.out.print(" " + builder.toString());
 
     }
 
-
-    public void placeShip(Ship ship){
+    public void placeShip(Ship ship) {
 
         try {
-                ship.placeShip(this, this.getTile((int) (Math.random() * (size - 2)), (int) (Math.random() * (size - 2))),
-                        Direction.values()[(int) (Math.random() * (Direction.values().length))]);
+            ship.placeShip(this, this.getTile((int) (Math.random() * (size - 2)), (int) (Math.random() * (size - 2))),
+                    Direction.values()[(int) (Math.random() * (Direction.values().length))]);
 
         } catch (OverShipException e) {
             e.printStackTrace();

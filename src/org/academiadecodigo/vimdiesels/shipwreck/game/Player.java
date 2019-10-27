@@ -62,11 +62,10 @@ public class Player {
         try {
             IntegerInputScanner colScanner = new IntegerRangeInputScanner(0, 9);
             IntegerInputScanner rowScanner = new IntegerRangeInputScanner(0, 9);
-            colScanner.setMessage("Insert Column");
-            rowScanner.setMessage("Insert Row");
+            colScanner.setMessage("Insert Column \n");
+            rowScanner.setMessage("Insert Row \n");
 
             Prompt promptPosition = new Prompt(playerSocket.getInputStream(), new PrintStream(playerSocket.getOutputStream()));
-            promptPosition.getUserInput(colScanner);
 
             int[] move = new int[2];
             move[0] = promptPosition.getUserInput(colScanner);
