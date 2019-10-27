@@ -13,6 +13,7 @@ public class Board {
     public Board(int size) {
         this.size = size;
         this.board = new Tile[size][size];
+
     }
 
     public void init() {

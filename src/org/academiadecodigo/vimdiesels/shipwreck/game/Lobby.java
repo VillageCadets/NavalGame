@@ -8,19 +8,22 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.ToDoubleBiFunction;
 
 public class Lobby implements Runnable {
 
     private Player player;
     private List<Lobby> lobbyList;
-    private LinkedList<Game> gamesList;
     private String nickName;
+    private List<Game> gamesList;
+    private Server serverSocket;
 
     public Lobby(Server serverSocket, Socket playerSocket, String nickName) {
         this.player = new Player(playerSocket);
         this.lobbyList = serverSocket.getLobbyList();
         this.nickName = nickName;
         gamesList = new LinkedList<>();
+        this.serverSocket = serverSocket;
     }
 
     @Override
@@ -52,7 +55,7 @@ public class Lobby implements Runnable {
                     case 1:
                         player.changeAvailability();
                         player.setInGame(true);
-                        gamesList.add(player.createGame());
+                        serverSocket.getGamesList().add(player.createGame());
                         break;
 
                     case 2:
@@ -76,15 +79,15 @@ public class Lobby implements Runnable {
     }
 
     private Game getGameOnHold() {
-        System.out.println(gamesList.size());
-        for (int i = 0; i < gamesList.size(); i++) {
+        System.out.println(serverSocket.getGamesList().size());
 
-            System.out.println("GAME -> " + gamesList.get(i).isOnHold());
-         //   if (g.isOnHold()) {
-          //      System.out.println(g);
-             //   return g;
-           // }
+        for (Game g : serverSocket.getGamesList()) {
+
+            if (g.isOnHold()) {
+            return g;
+            }
         }
+        // TODO: 27/10/2019 tell the player to create a new game because theres no games available.
         return null;
     }
 

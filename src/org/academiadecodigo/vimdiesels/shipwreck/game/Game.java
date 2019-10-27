@@ -24,11 +24,19 @@ public class Game {
     public void init() {
         System.out.println("GAME INIT");
         onHold = false;
+        start();
     }
 
 
+    private void showBoard(){
+        this.board = new Board(10);
+        board.init();
+        board.drawBoard();
+    }
+
     private void start(){
 
+        showBoard();
         int[] move = p1.makeMove();
         board.getTile(move[0], move[1]);
 
