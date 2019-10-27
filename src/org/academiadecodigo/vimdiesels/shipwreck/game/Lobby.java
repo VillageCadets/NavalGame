@@ -52,14 +52,19 @@ public class Lobby implements Runnable {
                     case 1:
                         player.changeAvailability();
                         player.setInGame(true);
+                        //Game game = player.createGame();
+                        gamesList.add(player.createGame());
+                        gamesList.add(player.createGame());
+                        gamesList.add(player.createGame());
+                        gamesList.add(player.createGame());
                         gamesList.add(player.createGame());
                         break;
 
                     case 2:
                         System.out.println("JOINING A GAME");
-                        Game game = getGameOnHold();
-                        game.addPlayer(player);
-                        game.init();
+                        Game gameToJoin = getGameOnHold();
+                        gameToJoin.addPlayer(player);
+                        gameToJoin.init();
                         player.changeAvailability();
                         // TODO: 26/10/2019 Talvez um sync aqui faça sentido...
 
