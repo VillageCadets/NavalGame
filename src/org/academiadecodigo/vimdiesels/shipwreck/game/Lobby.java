@@ -41,7 +41,7 @@ public class Lobby implements Runnable {
     }
 
     private void createMenu() {
-
+        clearScreen();
         String[] menuOptions = {"Play ", "Exit"};
         mainMenu = new MenuInputScanner(menuOptions);
         mainMenu.setMessage(TermImages.logo() + "\nSelect an Option" );
@@ -57,10 +57,12 @@ public class Lobby implements Runnable {
                 e.printStackTrace();
             }
         }
+
     }
 
     private void createSubMenu() {
-
+        clearScreen();
+        subMenu = null;
         String[] playOptions = {"Create Game", "Join Game", "Back"};
         subMenu = new MenuInputScanner(playOptions);
         subMenu.setMessage(TermImages.logo() + "\nSelect an Option" );
@@ -68,26 +70,39 @@ public class Lobby implements Runnable {
 
             switch (answerIndexPlay) {
                 case 1:
-
                     player.changeAvailability();
                     player.setInGame(true);
                     serverSocket.getGamesList().add(player.createGame());
+                    try {
+                        PrintWriter printWriter = new PrintWriter(player.getPlayerSocket().getOutputStream());
+                        printWriter.print(Colors.YELLOW.getColors() +
+                                "\nWaiting for a player to join...\n" +
+                                Colors.RESET.getColors());
+                        printWriter.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
                 case 2:
 
                     if (!(serverSocket.getGamesList().size() > 0)) {
+                        clearScreen();
                         try {
                             PrintWriter printWriter = new PrintWriter(player.getPlayerSocket().getOutputStream());
                             printWriter.print(Colors.YELLOW.getColors() +
                                     "\nNo games to join.\nTry again later or create a new one.\n" +
                                     Colors.RESET.getColors());
                             printWriter.flush();
+                            Thread.sleep(3000);
                         } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         createSubMenu();
                     }
+                    System.out.println("AQUI");
                     Game game = getGameOnHold();
                     game.addPlayer(player);
                     game.init();
@@ -119,4 +134,15 @@ public class Lobby implements Runnable {
         return player;
     }
 
+    public void clearScreen() {
+        try {
+
+            PrintWriter clear = new PrintWriter(player.getPlayerSocket().getOutputStream());
+            clear.print("\033[H\033[2J");
+            clear.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

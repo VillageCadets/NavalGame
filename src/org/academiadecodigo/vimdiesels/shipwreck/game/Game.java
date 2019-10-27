@@ -3,10 +3,7 @@ package org.academiadecodigo.vimdiesels.shipwreck.game;
 import org.academiadecodigo.vimdiesels.shipwreck.board.Board;
 import org.academiadecodigo.vimdiesels.shipwreck.board.Tile;
 import org.academiadecodigo.vimdiesels.shipwreck.board.TileType;
-import org.academiadecodigo.vimdiesels.shipwreck.ships.Ship;
-
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 
 public class Game {
@@ -25,27 +22,18 @@ public class Game {
         this.p2Board = new Board(10);
         onHold = true;
         this.players = new Player[2];
-        System.out.println("Waiting for players to join");
     }
 
     public boolean isOnHold() {
         return onHold;
     }
 
-    //we start the game and call the method start
     public void init() {
-        System.out.println("GAME INIT");
         onHold = false;
         start();
     }
 
-
     private void showBoard() {
-
-
-        //String p1BoardString = p1Board.drawBoard();
-
-        //String p2BoardString = p2Board.drawBoard();
 
         try {
             PrintWriter printWriterP1 = new PrintWriter(players[0].getPlayerSocket().getOutputStream());
@@ -70,8 +58,6 @@ public class Game {
                 printWriterP2.println(p2Board.drawBoard(false));
                 printWriterP2.flush();
 
-
-
             }
 
         } catch (IOException e) {
@@ -79,32 +65,9 @@ public class Game {
         }
     }
 
-    private String boardShow(String board) {
-        for (Player p : players) {
-
-            try {
-                printWriter = new PrintWriter(p.getPlayerSocket().getOutputStream());
-                printWriter.println(board);
-                printWriter.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-        return board;
-
-    }
-
-    private void turn() {
-
-    }
-
     private void  start() {
 
-
         showBoard();
-
 
         while (p1.getShotHit() < this.p2Board.getWinScore() && p2.getShotHit() < this.p1Board.getWinScore()) {
 
@@ -126,11 +89,8 @@ public class Game {
 
             int[] move = player.makeMove();
             printWriter = new PrintWriter(player.getPlayerSocket().getOutputStream());
-            System.out.println("p1 has played \n");
-            System.out.println(boardP2.getTile(move[0], move[1]));
 
             String boardAfterShot = shotCheck(move[0], move[1], boardP2, p1);
-
 
             printWriter.print("Enemy Board \n");
             printWriter.print(boardAfterShot);
@@ -148,6 +108,7 @@ public class Game {
             printWriter2.print(boardP2.drawBoard(false));
             printWriter2.flush();
             printWriter2.print("your turn has finished \n");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -160,8 +121,6 @@ public class Game {
 
             int[] move = player.makeMove();
             printWriter = new PrintWriter(player.getPlayerSocket().getOutputStream());
-            System.out.println("p1 has played \n");
-            System.out.println(boardP1.getTile(move[0], move[1]));
             String boardAfterShot = shotCheck(move[0], move[1], boardP1, p2);
 
             printWriter.print("Enemy Board \n");
@@ -183,10 +142,10 @@ public class Game {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private String shotCheck(int col, int row, Board board,Player player) {
+
         Tile tile = board.getTile(col, row);
         if (tile.getType().equals(TileType.SHIP)) {
 
@@ -198,8 +157,7 @@ public class Game {
 
             tile.setType(TileType.MISS);
         }
+
         return board.drawBoard(true);
     }
-
-
 }
