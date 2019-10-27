@@ -23,10 +23,10 @@ public class Tile {
                 representation = "\u001B[36m"+" [~]" + "\u001B[36m";
                 break;
             case MISS:
-                representation = "\u001B[31m"+" [O]"+ "\u001B[31m";
+                representation = "\u001B[33m"+" [O]"+ "\u001B[33m";
                 break;
             case SHIP:
-                representation = "\u001B[31m"+" [S]"+ "\u001B[31m";
+                representation = "\u001B[35m"+" [S]"+ "\u001B[35m";
             default:
                 break;
         }
