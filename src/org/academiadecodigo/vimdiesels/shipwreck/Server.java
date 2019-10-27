@@ -36,7 +36,7 @@ public class Server {
     //2nd - start the server with a welcome message
     private void init(int port) throws IOException {
 
-        System.out.println("====== Village Cadets ======");
+        System.out.println("====== Village Cadets Server Running ======");
         serverSocket = new ServerSocket(port);
     }
     //3rd - Server starts listening for players to join in

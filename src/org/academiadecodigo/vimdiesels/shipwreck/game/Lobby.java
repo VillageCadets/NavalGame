@@ -3,7 +3,12 @@ package org.academiadecodigo.vimdiesels.shipwreck.game;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.vimdiesels.shipwreck.Server;
+import org.academiadecodigo.vimdiesels.shipwreck.utility.Colors;
+import org.academiadecodigo.vimdiesels.shipwreck.utility.TermImages;
 
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,47 +38,67 @@ public class Lobby implements Runnable {
 
     private void createMenu() {
 
-        while (!player.isInGame()) {
+        String[] menuOptions = {"Play ", "Exit"};
+        Prompt prompt = player.getPrompt();
+        MenuInputScanner opt = new MenuInputScanner(menuOptions);
 
-            String[] menuOptions = {"Play ", "Exit"};
-            Prompt prompt = player.getPrompt();
-            MenuInputScanner opt = new MenuInputScanner(menuOptions);
+        opt.setMessage(TermImages.logo());
 
-            opt.setMessage("====== SHIP WRECK ======");
+        int answerIndex = prompt.getUserInput(opt);
 
-            int answerIndex = prompt.getUserInput(opt);
+        if (answerIndex == 1) {
 
-            if (answerIndex == 1) {
+            String[] playOptions = {"Create Game", "Join Game", "Back"};
+            Prompt promptGame = player.getPrompt();
+            MenuInputScanner gameOpt = new MenuInputScanner(playOptions);
 
-                String[] playOptions = {"Create Game", "Join Game", "Back"};
-                Prompt promptGame = player.getPrompt();
-                MenuInputScanner gameOpt = new MenuInputScanner(playOptions);
+            int answerIndexPlay = promptGame.getUserInput(gameOpt);
 
-                int answerIndexPlay = promptGame.getUserInput(gameOpt);
+            switch (answerIndexPlay) {
 
-                switch (answerIndexPlay) {
-                    case 1:
-                        player.changeAvailability();
-                        player.setInGame(true);
-                        serverSocket.getGamesList().add(player.createGame());
-                        break;
+                case 1:
 
-                    case 2:
-                        System.out.println("JOINING A GAME");
-                        Game game = getGameOnHold();
-                        game.addPlayer(player);
-                        game.init();
-                        player.changeAvailability();
-                        // TODO: 26/10/2019 Talvez um sync aqui faça sentido...
+                    player.changeAvailability();
+                    player.setInGame(true);
+                    serverSocket.getGamesList().add(player.createGame());
+                    break;
 
-                        break;
+                case 2:
 
-                    default:
-                        // TODO: 26/10/2019 go to previous menu
-                        break;
+                    if (!(serverSocket.getGamesList().size() > 0)) {
+                        try {
+                            PrintWriter printWriter = new PrintWriter(player.getPlayerSocket().getOutputStream());
+                            printWriter.print(Colors.YELLOW.getColors() +
+                                    "\nNo games to join.\nTry again later or create a new one.\n" +
+                                    Colors.RESET.getColors());
+                            printWriter.flush();
+                            printWriter.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        promptGame.getUserInput(gameOpt);
 
-                }
+                    }
+                    System.out.println("JOINING A GAME");
+                    Game game = getGameOnHold();
+                    game.addPlayer(player);
+                    game.init();
+                    player.changeAvailability();
+                    // TODO: 26/10/2019 Talvez um sync aqui faça sentido...
 
+                    break;
+
+                default:
+                    // TODO: 26/10/2019 go to previous menu
+                    promptGame.getUserInput(opt);
+                    break;
+            }
+
+        } else {
+            try {
+                player.getPlayerSocket().close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -84,7 +109,7 @@ public class Lobby implements Runnable {
         for (Game g : serverSocket.getGamesList()) {
 
             if (g.isOnHold()) {
-            return g;
+                return g;
             }
         }
         // TODO: 27/10/2019 tell the player to create a new game because theres no games available.
@@ -98,4 +123,5 @@ public class Lobby implements Runnable {
     public Player getPlayer() {
         return player;
     }
+
 }
