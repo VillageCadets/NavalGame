@@ -40,32 +40,43 @@ public class Game {
     }
 
 
-    private String showBoard() {
+    private void showBoard() {
 
-        p1Board.init();
-        String p1BoardString = p1Board.drawBoard();
-        p2Board.init();
-        String p2BoardString = p2Board.drawBoard();
+
+        //String p1BoardString = p1Board.drawBoard();
+
+        //String p2BoardString = p2Board.drawBoard();
 
         try {
+            PrintWriter printWriterP1 = new PrintWriter(players[0].getPlayerSocket().getOutputStream());
+            PrintWriter printWriterP2 = new PrintWriter(players[1].getPlayerSocket().getOutputStream());
 
             for (Player p : players) {
 
-                printWriter = new PrintWriter(p.getPlayerSocket().getOutputStream());
-                printWriter.print("HERE GOES A NAVAL BATTLE BOARD \n");
-                printWriter.print("P1 Board \n");
-                printWriter.println(p1BoardString);
-                printWriter.print("P2 Board \n");
-                printWriter.println(p2BoardString);
-                printWriter.flush();
+                if(p.equals(p1)){
+                    printWriterP1.print("P1 Board \n");
+                    String p1BoardString = p1Board.init(false);
+                    printWriterP1.println(p1BoardString);
+                    String p2BoardString = p2Board.init(true);
+                    printWriterP1.print("P2 Board \n");
+                    printWriterP1.println(p2BoardString);
+                    printWriterP1.flush();
+
+                    continue;
+                }
+                printWriterP2.print("P1 Board \n");
+                printWriterP2.println(p1Board.drawBoard(true));
+                printWriterP2.print("P2 Board \n");
+                printWriterP2.println(p2Board.drawBoard(false));
+                printWriterP2.flush();
+
+
 
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return p1BoardString;
     }
 
     private String boardShow(String board) {
@@ -120,13 +131,23 @@ public class Game {
 
             String boardAfterShot = shotCheck(move[0], move[1], boardP2, p1);
 
-            printWriter.print("your turn has finished \n");
+
             printWriter.print("Enemy Board \n");
             printWriter.print(boardAfterShot);
             printWriter.print("Your Board \n");
-            printWriter.print(boardP1.drawBoard());
+            printWriter.print(boardP1.drawBoard(false));
+            printWriter.print("your turn has finished \n");
+
             printWriter.flush();
 
+            PrintWriter printWriter2 = new PrintWriter(players[1].getPlayerSocket().getOutputStream());
+
+            printWriter2.print("Enemy Board \n");
+            printWriter2.print(boardP1.drawBoard(true));
+            printWriter2.print("Your Board \n");
+            printWriter2.print(boardP2.drawBoard(false));
+            printWriter2.flush();
+            printWriter2.print("your turn has finished \n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -142,12 +163,22 @@ public class Game {
             System.out.println("p1 has played \n");
             System.out.println(boardP1.getTile(move[0], move[1]));
             String boardAfterShot = shotCheck(move[0], move[1], boardP1, p2);
-            printWriter.print("your turn has finished \n");
+
             printWriter.print("Enemy Board \n");
             printWriter.print(boardAfterShot);
             printWriter.print("Your Board \n");
-            printWriter.print(boardP2.drawBoard());
+            printWriter.print(boardP2.drawBoard(false));
+            printWriter.print("your turn has finished \n");
             printWriter.flush();
+
+            PrintWriter printWriter2 = new PrintWriter(players[0].getPlayerSocket().getOutputStream());
+
+            printWriter2.print("Enemy Board \n");
+            printWriter2.print(boardP2.drawBoard(true));
+            printWriter2.print("Your Board \n");
+            printWriter2.print(boardP1.drawBoard(false));
+            printWriter2.print("your turn has finished \n");
+            printWriter2.flush();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -167,8 +198,7 @@ public class Game {
 
             tile.setType(TileType.MISS);
         }
-
-        return board.drawBoard();
+        return board.drawBoard(true);
     }
 
 

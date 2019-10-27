@@ -13,20 +13,24 @@ public class Tile {
         this.type = type;
     }
 
-    public void draw() {
+    public void draw(boolean hidden) {
 
         switch (this.type) {
             case HIT:
-                representation = "\u001B[31m"+" [X]";
+                representation = "\u001B[31m" + " [X]";
                 break;
             case SEA:
-                representation = "\u001B[36m"+" [~]";
+                representation = "\u001B[36m" + " [~]";
                 break;
             case MISS:
-                representation = "\u001B[33m"+" [O]";
+                representation = "\u001B[33m" + " [O]";
                 break;
             case SHIP:
-                representation = "\u001B[35m"+" [S]";
+                if (hidden) {
+                    representation = "\u001B[36m" + " [~]";
+                } else {
+                    representation = "\u001B[35m" + " [S]";
+                }
             default:
                 break;
         }
@@ -36,7 +40,7 @@ public class Tile {
 
     @Override
     public String toString() {
-        return representation ;
+        return representation;
     }
 
 
