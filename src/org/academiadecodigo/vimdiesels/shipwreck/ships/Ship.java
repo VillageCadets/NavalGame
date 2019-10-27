@@ -4,6 +4,8 @@ import org.academiadecodigo.vimdiesels.shipwreck.board.Board;
 import org.academiadecodigo.vimdiesels.shipwreck.board.Tile;
 import org.academiadecodigo.vimdiesels.shipwreck.board.TileType;
 
+import java.util.ArrayList;
+
 public class Ship {
 
     private int shipSize;
@@ -13,29 +15,36 @@ public class Ship {
         this.shipSize = size;
     }
 
-    public void placeShip(Board board, Tile firstTile, Direction direction) throws OverShipException, OutOfBoardException {
+    public void placeShip(Board board, Tile firstTile, Direction direction) throws OverShipException, OutOfBoardException, ShipAdjacentException {
 
         int x = firstTile.getX();
         int y = firstTile.getY();
 
-        if (!shipWithinBoard(board, firstTile, direction)){
+        if (!shipWithinBoard(board, firstTile, direction)) {
+
+            placeShip(board, board.getTile((int) (Math.random() * (board.getSize() - 2)), (int) (Math.random() * (board.getSize() - 2))),
+                    direction);
+           return;
+        }
+        if (shipOverShip(board, firstTile, direction)) {
 
             placeShip(board, board.getTile((int) (Math.random() * (board.getSize() - 2)), (int) (Math.random() * (board.getSize() - 2))),
                     direction);
             return;
         }
-        if (shipOverShip(board,firstTile,direction) ) {
+
+   /*     while (shipAdjacentShip(board, firstTile,direction)) {
 
             placeShip(board, board.getTile((int) (Math.random() * (board.getSize() - 2)), (int) (Math.random() * (board.getSize() - 2))),
                     direction);
-            return;
+          continue;
         }
-
+*/
         if (direction.equals(Direction.HORIZONTAL)) {
 
             for (int i = x; i < x + shipSize; i++) {
 
-                board.getTile(i , y).setType(TileType.SHIP);
+                board.getTile(i, y).setType(TileType.SHIP);
 
             }
 
@@ -46,7 +55,7 @@ public class Ship {
 
             for (int i = y; i < y + shipSize; i++) {
 
-                board.getTile(x , i).setType(TileType.SHIP);
+                board.getTile(x, i).setType(TileType.SHIP);
 
             }
 
@@ -54,7 +63,7 @@ public class Ship {
         }
     }
 
-    private boolean shipWithinBoard(Board board, Tile firstTile, Direction direction) {
+    private boolean shipWithinBoard(Board board, Tile firstTile, Direction direction) throws OutOfBoardException {
 
         boolean insideBoard = true;
         int x = firstTile.getX();
@@ -73,7 +82,7 @@ public class Ship {
         return insideBoard;
     }
 
-    private boolean shipOverShip(Board board, Tile firstTile, Direction direction) throws OverShipException{
+    private boolean shipOverShip(Board board, Tile firstTile, Direction direction) throws OverShipException {
 
         boolean overShip = false;
         int x = firstTile.getX();
@@ -107,6 +116,58 @@ public class Ship {
 
         return overShip;
     }
+
+
+/*   public boolean shipAdjacentShip(Board board, Tile firstTile, Direction direction) throws ShipAdjacentException {
+        boolean isAdjacent = false;
+        int x = firstTile.getX();
+        int y = firstTile.getY();
+        ArrayList<Tile> adjacentTiles = new ArrayList<>();
+
+        if (direction.equals(Direction.HORIZONTAL)){
+
+            for (int i = x; i < x + shipSize; i++) {
+
+                adjacentTiles.add(board.getTile(i,y + 1));
+                adjacentTiles.add(board.getTile(i,y - 1));
+            }
+
+            for (Tile t: adjacentTiles
+                 ) {
+                if (t.getType().equals(TileType.SHIP)){
+
+                    isAdjacent = true;
+                    return isAdjacent;
+
+                }
+            }
+        }
+
+        if (direction.equals(Direction.VERTICAL)){
+
+            for (int i = y; i < y + shipSize; i++) {
+
+                adjacentTiles.add(board.getTile(x-1,i));
+                adjacentTiles.add(board.getTile(x+1,i));
+            }
+
+            for (Tile t: adjacentTiles
+            ) {
+                if (t.getType().equals(TileType.SHIP)){
+
+                    isAdjacent = true;
+                    return isAdjacent;
+
+                }
+            }
+        }
+
+
+
+
+        return isAdjacent;
+
+    }*/
 
     public int getShipSize() {
         return shipSize;

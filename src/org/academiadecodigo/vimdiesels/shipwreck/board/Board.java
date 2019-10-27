@@ -1,15 +1,16 @@
 package org.academiadecodigo.vimdiesels.shipwreck.board;
 
-import org.academiadecodigo.vimdiesels.shipwreck.ships.Direction;
-import org.academiadecodigo.vimdiesels.shipwreck.ships.OutOfBoardException;
-import org.academiadecodigo.vimdiesels.shipwreck.ships.OverShipException;
-import org.academiadecodigo.vimdiesels.shipwreck.ships.Ship;
+import org.academiadecodigo.vimdiesels.shipwreck.ships.*;
+import org.academiadecodigo.vimdiesels.shipwreck.utility.TermImages;
+
+import java.util.ArrayList;
 
 public class Board {
 
     private Tile[][] board;
     private int size;
     private int winScore;
+    private ArrayList<Tile> adjacentTiles;
 
     public Board(int size) {
         this.size = size;
@@ -68,6 +69,8 @@ public class Board {
         } catch (OverShipException e) {
             e.printStackTrace();
         } catch (OutOfBoardException e) {
+            e.printStackTrace();
+        } catch (ShipAdjacentException e) {
             e.printStackTrace();
         }
 
