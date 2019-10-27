@@ -3,6 +3,9 @@ package org.academiadecodigo.vimdiesels.shipwreck.game;
 import org.academiadecodigo.vimdiesels.shipwreck.board.Board;
 import org.academiadecodigo.vimdiesels.shipwreck.board.Tile;
 import org.academiadecodigo.vimdiesels.shipwreck.board.TileType;
+import org.academiadecodigo.vimdiesels.shipwreck.utility.Colors;
+import org.academiadecodigo.vimdiesels.shipwreck.utility.TermImages;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -69,13 +72,47 @@ public class Game {
 
         showBoard();
 
-        while (p1.getShotHit() < this.p2Board.getWinScore() && p2.getShotHit() < this.p1Board.getWinScore()) {
-
+        while (p1.getShotHit() < p2Board.getWinScore() && p2.getShotHit() < p1Board.getWinScore()) {
             fireP1(p1,this.p1Board, this.p2Board);
             fireP2(p2,this.p2Board, this.p1Board);
-
         }
+
+        if (p1.getShotHit() > p2.getShotHit()) {
+            winGame(p1);
+            return;
+        }
+        winGame(p2);
     }
+
+    private void winGame(Player player) {
+
+        String userName = "Player 2 ";
+        if (player.equals(p1)) {
+            userName = "Player 1 ";
+        }
+
+        try {
+            PrintWriter printWriter = new PrintWriter(player.getPlayerSocket().getOutputStream());
+            printWriter.print(Colors.YELLOW.getColors() +
+                    "\n" + userName + "won the game!\n" +
+                    Colors.RESET.getColors());
+            printWriter.print(TermImages.gameWin());
+            printWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+
+            p1.getPlayerSocket().close();
+            p2.getPlayerSocket().close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     public void addPlayer(Player player) {
         p2 = player;
@@ -96,7 +133,7 @@ public class Game {
             printWriter.print(boardAfterShot);
             printWriter.print("Your Board \n");
             printWriter.print(boardP1.drawBoard(false));
-            printWriter.print("your turn has finished \n");
+            printWriter.print("Shots fired!! Waiting for other player... \n");
 
             printWriter.flush();
 
@@ -107,7 +144,7 @@ public class Game {
             printWriter2.print("Your Board \n");
             printWriter2.print(boardP2.drawBoard(false));
             printWriter2.flush();
-            printWriter2.print("your turn has finished \n");
+            printWriter2.print("Shots fired!! Waiting for other player... \n");
 
         } catch (IOException e) {
             e.printStackTrace();
