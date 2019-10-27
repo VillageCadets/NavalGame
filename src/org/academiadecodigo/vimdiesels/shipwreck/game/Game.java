@@ -83,7 +83,7 @@ public class Game {
 
             int[] move = player.makeMove();
             printWriter = new PrintWriter(player.getPlayerSocket().getOutputStream());
-            System.out.println("p1 has played \n");
+            printWriter.print("p1 has played \n");
             System.out.println(board.getTile(move[0], move[1]));
             printWriter.print("your turn has finished \n");
             printWriter.flush();

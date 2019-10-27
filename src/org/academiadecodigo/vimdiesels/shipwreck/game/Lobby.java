@@ -3,6 +3,7 @@ package org.academiadecodigo.vimdiesels.shipwreck.game;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.vimdiesels.shipwreck.Server;
+import org.academiadecodigo.vimdiesels.shipwreck.utility.TermImages;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class Lobby implements Runnable {
             Prompt prompt = player.getPrompt();
             MenuInputScanner opt = new MenuInputScanner(menuOptions);
 
-            opt.setMessage("====== SHIP WRECK ======");
+            opt.setMessage(TermImages.logo());
 
             int answerIndex = prompt.getUserInput(opt);
 
