@@ -5,18 +5,25 @@ import org.academiadecodigo.bootcamp.scanners.menu.MenuInputScanner;
 import org.academiadecodigo.vimdiesels.shipwreck.Server;
 
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.ToDoubleBiFunction;
 
 public class Lobby implements Runnable {
 
     private Player player;
     private List<Lobby> lobbyList;
     private String nickName;
+    private List<Game> gamesList;
+    private Server serverSocket;
 
     public Lobby(Server serverSocket, Socket playerSocket, String nickName) {
         this.player = new Player(playerSocket);
         this.lobbyList = serverSocket.getLobbyList();
         this.nickName = nickName;
+        gamesList = new LinkedList<>();
+        this.serverSocket = serverSocket;
     }
 
     @Override
@@ -38,37 +45,49 @@ public class Lobby implements Runnable {
 
             if (answerIndex == 1) {
 
-                String [] playOptions = {"Create Game", "Join Game"};
+                String[] playOptions = {"Create Game", "Join Game", "Back"};
                 Prompt promptGame = player.getPrompt();
                 MenuInputScanner gameOpt = new MenuInputScanner(playOptions);
 
-                int answerIndexPlay= promptGame.getUserInput(gameOpt);
+                int answerIndexPlay = promptGame.getUserInput(gameOpt);
 
-                if(answerIndexPlay == 1){
+                switch (answerIndexPlay) {
+                    case 1:
+                        player.changeAvailability();
+                        player.setInGame(true);
+                        serverSocket.getGamesList().add(player.createGame());
+                        break;
 
-                    player.changeAvailability();
+                    case 2:
+                        System.out.println("JOINING A GAME");
+                        Game game = getGameOnHold();
+                        game.addPlayer(player);
+                        game.init();
+                        player.changeAvailability();
+                        // TODO: 26/10/2019 Talvez um sync aqui faça sentido...
 
-                    while (checkPlayerAvailability() == null) {
-                        System.out.println("-> " + checkPlayerAvailability());
-                        checkPlayerAvailability();
-                    }
-                    player.setInGame(true);
-                    player.createGame(player, checkPlayerAvailability());
-                    System.out.println("Waiting for players to join");
-                    
+                        break;
+
+                    default:
+                        // TODO: 26/10/2019 go to previous menu
+                        break;
+
                 }
+
             }
-
-
         }
     }
 
-    private Player checkPlayerAvailability() {
-        for (Lobby l : lobbyList) {
-            if (!l.equals(this) && l.getPlayer().isAvailableToPlay())
-                return l.getPlayer();
+    private Game getGameOnHold() {
+        System.out.println(serverSocket.getGamesList().size());
+
+        for (Game g : serverSocket.getGamesList()) {
+
+            if (g.isOnHold()) {
+            return g;
+            }
         }
-        System.out.println("Waiting for other players to join");
+        // TODO: 27/10/2019 tell the player to create a new game because theres no games available.
         return null;
     }
 
