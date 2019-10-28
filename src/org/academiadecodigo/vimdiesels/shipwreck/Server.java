@@ -2,7 +2,6 @@ package org.academiadecodigo.vimdiesels.shipwreck;
 
 import org.academiadecodigo.vimdiesels.shipwreck.game.Game;
 import org.academiadecodigo.vimdiesels.shipwreck.game.Lobby;
-import org.academiadecodigo.vimdiesels.shipwreck.game.Player;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -22,7 +21,6 @@ public class Server {
 
     private int connectionNumber;
 
-    //1st - start the threads and call the listening method
     public void run(int port) throws IOException {
 
         init(port);
@@ -33,13 +31,13 @@ public class Server {
             listening();
         }
     }
-    //2nd - start the server with a welcome message
+
     private void init(int port) throws IOException {
 
         System.out.println("====== Village Cadets Server Running ======");
         serverSocket = new ServerSocket(port);
     }
-    //3rd - Server starts listening for players to join in
+
     private void listening() throws IOException {
 
         ++connectionNumber;

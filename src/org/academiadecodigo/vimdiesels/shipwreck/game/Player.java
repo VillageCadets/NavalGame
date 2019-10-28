@@ -3,14 +3,12 @@ package org.academiadecodigo.vimdiesels.shipwreck.game;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.integer.IntegerInputScanner;
 import org.academiadecodigo.bootcamp.scanners.integer.IntegerRangeInputScanner;
-import org.academiadecodigo.vimdiesels.shipwreck.board.Tile;
 
 import java.io.*;
 import java.net.Socket;
 
 public class Player {
 
-    private String username;
     private Socket playerSocket;
     BufferedReader in = null;
     private Prompt prompt;

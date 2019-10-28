@@ -4,8 +4,6 @@ import org.academiadecodigo.vimdiesels.shipwreck.board.Board;
 import org.academiadecodigo.vimdiesels.shipwreck.board.Tile;
 import org.academiadecodigo.vimdiesels.shipwreck.board.TileType;
 
-import java.util.ArrayList;
-
 public class Ship {
 
     private int shipSize;
@@ -48,7 +46,6 @@ public class Ship {
 
             }
 
-
         }
 
         if (direction.equals(Direction.VERTICAL)) {
@@ -58,7 +55,6 @@ public class Ship {
                 board.getTile(x, i).setType(TileType.SHIP);
 
             }
-
 
         }
     }
@@ -96,7 +92,6 @@ public class Ship {
 
                     overShip = true;
 
-
                 }
             }
         }
@@ -112,7 +107,6 @@ public class Ship {
                 }
             }
         }
-
 
         return overShip;
     }
