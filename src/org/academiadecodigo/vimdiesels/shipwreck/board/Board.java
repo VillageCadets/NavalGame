@@ -1,6 +1,7 @@
 package org.academiadecodigo.vimdiesels.shipwreck.board;
 
 import org.academiadecodigo.vimdiesels.shipwreck.ships.*;
+import org.academiadecodigo.vimdiesels.shipwreck.utility.TermImages;
 
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ public class Board {
     private Tile[][] board;
     private int size;
     private int winScore;
-    // private ArrayList<Tile> adjacentTiles;    //Used in an adjacency checking method.
+    private ArrayList<Tile> adjacentTiles;
 
     public Board(int size) {
         this.size = size;

@@ -1,5 +1,7 @@
 package org.academiadecodigo.vimdiesels.shipwreck.utility;
 
+import java.io.PrintWriter;
+
 public class TermImages {
 
     public static String logo(){

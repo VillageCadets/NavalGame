@@ -86,7 +86,6 @@ public class Game {
 
     private void winGame(Player player) {
 
-        PrintWriter loserWriter;
         String userName = "Player 2 ";
         if (player.equals(p1)) {
             userName = "Player 1 ";
@@ -99,21 +98,6 @@ public class Game {
                     Colors.RESET.getColors());
             printWriter.print(TermImages.gameWin());
             printWriter.flush();
-
-            if (player.equals(p1)){
-
-                loserWriter = new PrintWriter(p2.getPlayerSocket().getOutputStream());
-                loserWriter.println(TermImages.gameOver());
-                loserWriter.flush();
-            }
-
-            if (player.equals(p2)){
-
-                loserWriter = new PrintWriter(p1.getPlayerSocket().getOutputStream());
-                loserWriter.println(TermImages.gameOver());
-                loserWriter.flush();
-            }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -128,6 +112,7 @@ public class Game {
         }
 
     }
+
 
     public void addPlayer(Player player) {
         p2 = player;
@@ -179,7 +164,7 @@ public class Game {
             printWriter.print(boardAfterShot);
             printWriter.print("Your Board \n");
             printWriter.print(boardP2.drawBoard(false));
-            printWriter.print("\n Round over! \n");
+            printWriter.print("your turn has finished \n");
             printWriter.flush();
 
             PrintWriter printWriter2 = new PrintWriter(players[0].getPlayerSocket().getOutputStream());
@@ -188,7 +173,7 @@ public class Game {
             printWriter2.print(boardP2.drawBoard(true));
             printWriter2.print("Your Board \n");
             printWriter2.print(boardP1.drawBoard(false));
-            printWriter2.print("\n Round over! \n");
+            printWriter2.print("your turn has finished \n");
             printWriter2.flush();
 
         } catch (IOException e) {
